@@ -9,6 +9,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBarWidget(
         actions: [
@@ -21,21 +22,93 @@ class HomeView extends StatelessWidget {
       body: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
           switch (state.status) {
-            case HomeStatus.initial:
-            case HomeStatus.loading:
+            case HomeStatus.initial: // but if need will add more actions
+            case HomeStatus.loading: // view to circule loading
               return const Center(child: CircularProgressIndicator());
-            case HomeStatus.failure:
-              return Center(child: Text(state.errorMessage ?? 'Error'));
+            case HomeStatus.failure: // show Error
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(state.errorMessage ?? 'Error'),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => context.read<HomeBloc>().add(HomeFetchProducts()),
+                      child: const Text('Reintentar'),
+                    ),
+                  ],
+                ),
+              );
             case HomeStatus.success:
               if (state.products.isEmpty) {
                 return const Center(child: Text('No hay productos'));
               }
-              return ListView.builder(
-                itemCount: state.products.length,
-                itemBuilder: (context, index) {
-                  final product = state.products[index];
-                  return ProductCard(product: product);
-                },
+
+              final mediaQuery = MediaQuery.of(context);
+              final isLandscape = mediaQuery.orientation == Orientation.landscape;
+              final isPortrait = mediaQuery.orientation != Orientation.portrait;
+
+              final isTablet = mediaQuery.size.shortestSide > 600;
+              final isWideScreen = mediaQuery.size.width > 600;
+              final columns = isTablet && isPortrait ? 3 : 2;
+              final aspect = isLandscape ? 2.0 : 2.0;
+
+              return Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+                      padding: const EdgeInsets.all(2),
+                      child: PopupMenuButton<ProductOrder>(
+                        icon: const Icon(Icons.sort),
+                        onSelected: (order) {
+                          context.read<HomeBloc>().add(HomeProductOrderChanged(order));
+                        },
+                        itemBuilder: (context) => [
+                          const PopupMenuItem(
+                            value: ProductOrder.defaultOrder,
+                            child: Text('Default'),
+                          ),
+                          const PopupMenuItem(
+                            value: ProductOrder.priceLow,
+                            child: Text('Price: Low'),
+                          ),
+                          const PopupMenuItem(
+                            value: ProductOrder.priceHigh,
+                            child: Text('Price: High'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Expanded(
+                      child:
+                      isWideScreen ?
+                      GridView.builder(
+                        padding: const EdgeInsets.all(16),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: columns,
+                          childAspectRatio: aspect,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemCount: state.products.length,
+                        itemBuilder: (context, index) {
+                          final product = state.products[index];
+                          return ProductCard(product: product);
+                        },
+                      ) :
+                      ListView.builder(
+                        itemCount: state.products.length,
+                        itemBuilder: (context, index) {
+                          final product = state.products[index];
+                          return ProductCard(product: product);
+                        },
+                      )
+                  )
+                ],
               );
           }
         },

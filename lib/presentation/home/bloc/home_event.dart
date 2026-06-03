@@ -8,3 +8,13 @@ abstract class HomeEvent extends Equatable {
 }
 
 class HomeFetchProducts extends HomeEvent {}
+
+class HomeProductOrderChanged extends HomeEvent {
+  final ProductOrder productOrder;
+
+  const HomeProductOrderChanged(this.productOrder);
+
+  @override
+  List<Object> get props => [productOrder];
+
+}

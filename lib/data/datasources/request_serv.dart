@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 class RequestServ {
   static const String baseUrl = "https://fakestoreapi.com";
   static const String urlProduct = "/products";
+  static const isDebugMode = false;
 
 
   RequestServ._privateConstructor();
@@ -27,7 +28,7 @@ class RequestServ {
       } else {
         uri = Uri.parse(fullUrl);
       }
-      print("=> ${uri}");
+
       http.Response response;
 
       switch (method.toUpperCase()) {
@@ -66,6 +67,16 @@ class RequestServ {
       }
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
+
+        if(isDebugMode){
+          print("=================$urlParam=======================");
+          print("[ URL ]     => $uri ");
+          print("[ PARAMS ]  => ${params ?? '-' }");
+          print("[ METHOD ]  => ${method}");
+          print("[ RESPONSE ]=> ${response.body} ");
+          print("========================================");
+        }
+
         return response.body;
       } else {
         print("HTTP error: ${response.statusCode}");
