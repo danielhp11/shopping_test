@@ -8,7 +8,6 @@ class RatingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Generamos la lista de estrellas dinámicamente
     List<Widget> stars = List.generate(5, (index) {
       if (rating.rate >= index + 1) {
         return const Icon(Icons.star, color: Colors.amber, size: 18);

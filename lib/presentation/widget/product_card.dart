@@ -36,7 +36,6 @@ class ProductCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Imagen con bordes redondeados
             Hero(
               tag: 'img_${product.id}',
               child: ClipRRect(

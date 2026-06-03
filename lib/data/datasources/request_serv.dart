@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
@@ -8,7 +7,6 @@ class RequestServ {
   static const String urlProduct = "/products";
 
 
-  // Singleton pattern
   RequestServ._privateConstructor();
   static final RequestServ instance = RequestServ._privateConstructor();
 
@@ -24,7 +22,6 @@ class RequestServ {
 
       Uri uri;
 
-      // Construir URI con query params si existen
       if (method.toUpperCase() == 'GET' && params != null && params.isNotEmpty) {
         uri = Uri.parse(fullUrl).replace(queryParameters: params);
       } else {
