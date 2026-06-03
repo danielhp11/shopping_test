@@ -1,14 +1,13 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
 class RequestServ {
   static const String baseUrl = "https://fakestoreapi.com";
   static const String urlProduct = "/products";
+  static const isDebugMode = false;
 
 
-  // Singleton pattern
   RequestServ._privateConstructor();
   static final RequestServ instance = RequestServ._privateConstructor();
 
@@ -24,13 +23,12 @@ class RequestServ {
 
       Uri uri;
 
-      // Construir URI con query params si existen
       if (method.toUpperCase() == 'GET' && params != null && params.isNotEmpty) {
         uri = Uri.parse(fullUrl).replace(queryParameters: params);
       } else {
         uri = Uri.parse(fullUrl);
       }
-      print("=> ${uri}");
+
       http.Response response;
 
       switch (method.toUpperCase()) {
@@ -69,6 +67,16 @@ class RequestServ {
       }
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
+
+        if(isDebugMode){
+          print("=================$urlParam=======================");
+          print("[ URL ]     => $uri ");
+          print("[ PARAMS ]  => ${params ?? '-' }");
+          print("[ METHOD ]  => ${method}");
+          print("[ RESPONSE ]=> ${response.body} ");
+          print("========================================");
+        }
+
         return response.body;
       } else {
         print("HTTP error: ${response.statusCode}");

@@ -10,7 +10,7 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return GestureDetector( // necessary to add  hero animation
       onTap: () {
         Navigator.push(
           context,
@@ -34,51 +34,40 @@ class ProductCard extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
+        child: Column(
           children: [
-            // Imagen con bordes redondeados
-            Hero(
-              tag: 'img_${product.id}',
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  product.image,
-                  width: 80,
-                  height: 80,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-            const SizedBox(width: 16),
-            // Información del producto
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+            Row(
+              children: [
                 Hero(
-                  tag: 'title_${product.id}',
-                  child: Material(
-                    color: Colors.transparent,
-                    child: Text(
-                      product.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  tag: 'img_${product.id}',
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(
+                      product.image,
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.contain,
                     ),
                   ),
                 ),
-                  const SizedBox(height: 4),
-                  Text(
-                    product.category,
-                    overflow: TextOverflow.clip,
-                    style: const TextStyle(fontWeight: FontWeight.w300, fontSize: 14),
-                  ),
-                  const SizedBox(height: 4),
-                  RatingWidget(rating: product.rate),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        product.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        product.category,
+                        overflow: TextOverflow.clip,
+                        style: const TextStyle(fontWeight: FontWeight.w300, fontSize: 14),
+                      ),
+                      const SizedBox(height: 4),
                       Text(
                         '\$${product.price}',
                         style: const TextStyle(
@@ -87,35 +76,42 @@ class ProductCard extends StatelessWidget {
                           fontSize: 18,
                         ),
                       ),
-                      Hero(
-                        tag: 'btn_${product.id}',
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailView(product: product),
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.navigate_next, size: 18),
-                          label: const Text("show more..."),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF1E3A8A),
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            elevation: 0,
-                          ),
-                        ),
-                      ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                RatingWidget(rating: product.rate),
+                Hero(
+                  tag: 'btn_${product.id}',
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailView(product: product),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.navigate_next, size: 18),
+                    label: const Text("show more..."),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF1E3A8A),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 0,
+                    ),
+                  ),
+                )
+              ],
+            )
           ],
         ),
       ),

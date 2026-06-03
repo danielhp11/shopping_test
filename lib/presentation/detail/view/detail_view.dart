@@ -16,7 +16,6 @@ class DetailView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Imagen con Hero
             Hero(
               tag: 'img_${product.id}',
               child: Container(

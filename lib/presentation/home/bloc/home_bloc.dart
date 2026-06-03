@@ -1,16 +1,20 @@
-import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:shopping_app/data/model/product_model.dart';
+import 'package:shopping_app/data/repositories/product_repository.dart';
 
-import '../../../data/datasources/request_serv.dart';
 part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc() : super(const HomeState()) {
+  final ProductRepository _productRepository;
+
+  HomeBloc({required ProductRepository productRepository})
+      : _productRepository = productRepository,
+        super(const HomeState()) {
     on<HomeFetchProducts>(_onFetchProducts);
+    on<HomeProductOrderChanged>(_onOrderChanged);
   }
 
   Future<void> _onFetchProducts(
@@ -20,34 +24,46 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(status: HomeStatus.loading));
 
     try {
-      final response = await RequestServ.instance.handlingRequest(
-        urlParam: RequestServ.urlProduct,
-      );
+      final products = await _productRepository.getProducts();
 
-      if (response != null) {
-        final List<dynamic> jsonList = jsonDecode(response);
-        final products = jsonList
-            .map((json) => ProductModel.fromJson(json as Map<String, dynamic>))
-            .toList();
-
-        emit(state.copyWith(
-          status: HomeStatus.success,
-          products: products,
-        ));
-      } else {
-        emit(state.copyWith(
-          status: HomeStatus.failure,
-          errorMessage: 'No se pudieron cargar los productos',
-        ));
-      }
+      emit(state.copyWith(
+        status: HomeStatus.success,
+        products: products,
+      ));
     } catch (e) {
       emit(state.copyWith(
         status: HomeStatus.failure,
         errorMessage: e.toString(),
       ));
-    }
-    finally{
+    } finally {
       FlutterNativeSplash.remove();
     }
+  }
+
+  void _onOrderChanged(
+    HomeProductOrderChanged event,
+    Emitter<HomeState> emit
+  ){
+    List <ProductModel> productOrder = List.from(state.products);
+
+    switch (event.productOrder){
+      case ProductOrder.defaultOrder:
+        productOrder.sort( (a,b) => a.id.compareTo(b.id) );
+        break;
+      case ProductOrder.priceLow:
+        productOrder.sort( (a,b) => a.price.compareTo(b.price) );
+        break;
+      case ProductOrder.priceHigh:
+        productOrder.sort( (a,b) => b.price.compareTo(a.price) );
+
+    }
+
+    emit(
+      state.copyWith(
+        products: productOrder,
+        productOrder: event.productOrder
+      )
+    );
+
   }
 }
