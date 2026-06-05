@@ -18,3 +18,13 @@ class HomeProductOrderChanged extends HomeEvent {
   List<Object> get props => [productOrder];
 
 }
+
+class HomeSearchChanged extends HomeEvent {
+  final String textSearch;
+
+  const HomeSearchChanged( this.textSearch );
+
+  @override
+  List<Object> get props => [textSearch];
+
+}

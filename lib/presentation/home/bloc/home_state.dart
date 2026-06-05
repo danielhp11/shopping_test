@@ -7,11 +7,13 @@ class HomeState extends Equatable {
   const HomeState({
     this.status = HomeStatus.initial,
     this.products = const <ProductModel>[],
+    this.filterProduct = const <ProductModel>[],
     this.productOrder = ProductOrder.defaultOrder,
     this.errorMessage,
   });
 
   final HomeStatus status;
+  final List<ProductModel> filterProduct;
   final List<ProductModel> products;
   final String? errorMessage;
   final ProductOrder productOrder;
@@ -19,12 +21,14 @@ class HomeState extends Equatable {
   HomeState copyWith({
     HomeStatus? status,
     List<ProductModel>? products,
+    List<ProductModel>? filterProduct,
     ProductOrder? productOrder,
     String? errorMessage,
   }) {
     return HomeState(
       status: status ?? this.status,
       products: products ?? this.products,
+      filterProduct: filterProduct ?? this.filterProduct,
       productOrder: productOrder ?? this.productOrder,
       errorMessage: errorMessage ?? this.errorMessage,
     );
