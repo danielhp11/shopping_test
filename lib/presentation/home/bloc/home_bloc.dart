@@ -15,6 +15,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         super(const HomeState()) {
     on<HomeFetchProducts>(_onFetchProducts);
     on<HomeProductOrderChanged>(_onOrderChanged);
+    on<HomeSearchChanged>(_onSearchChanged);
   }
 
   Future<void> _onFetchProducts(
@@ -29,6 +30,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(state.copyWith(
         status: HomeStatus.success,
         products: products,
+        filterProduct: products
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -66,4 +68,19 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
 
   }
+
+  void _onSearchChanged(HomeSearchChanged event, Emitter<HomeState> emit) {
+    final query = event.textSearch.toLowerCase();
+
+    if (query.isEmpty) {
+      emit(state.copyWith(products: state.filterProduct));
+    } else {
+      final filtered = state.products.where((p) =>
+          p.title.toLowerCase().contains(query)
+      ).toList();
+
+      emit(state.copyWith(products: filtered));
+    }
+  }
+
 }

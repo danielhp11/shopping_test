@@ -55,34 +55,63 @@ class HomeView extends StatelessWidget {
 
               return Column(
                 children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-                      padding: const EdgeInsets.all(2),
-                      child: PopupMenuButton<ProductOrder>(
-                        icon: const Icon(Icons.sort),
-                        onSelected: (order) {
-                          context.read<HomeBloc>().add(HomeProductOrderChanged(order));
-                        },
-                        itemBuilder: (context) => [
-                          const PopupMenuItem(
-                            value: ProductOrder.defaultOrder,
-                            child: Text('Default'),
-                          ),
-                          const PopupMenuItem(
-                            value: ProductOrder.priceLow,
-                            child: Text('Price: Low'),
-                          ),
-                          const PopupMenuItem(
-                            value: ProductOrder.priceHigh,
-                            child: Text('Price: High'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 8),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  //   child: Row(
+                  //     children: [
+                  //       Expanded(
+                  //         child: TextField(
+                  //           decoration: InputDecoration(
+                  //             hintText: 'Buscar productos...',
+                  //             prefixIcon: const Icon(Icons.search, color: Color(0xFF1E3A8A)),
+                  //             contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                  //             border: OutlineInputBorder(
+                  //               borderRadius: BorderRadius.circular(12),
+                  //               borderSide: BorderSide(color: Colors.grey.shade300),
+                  //             ),
+                  //             enabledBorder: OutlineInputBorder(
+                  //               borderRadius: BorderRadius.circular(12),
+                  //               borderSide: BorderSide(color: Colors.grey.shade300),
+                  //             ),
+                  //             filled: true,
+                  //             fillColor: Colors.grey.shade100,
+                  //           ),
+                  //           onChanged: (value) {
+                  //             context.read<HomeBloc>().add(HomeSearchChanged(value));
+                  //           },
+                  //         ),
+                  //       ),
+                  //       const SizedBox(width: 10),
+                  //       Container(
+                  //         decoration: BoxDecoration(
+                  //           color: const Color(0xFF1E3A8A).withOpacity(0.1),
+                  //           borderRadius: BorderRadius.circular(12),
+                  //         ),
+                  //         child: PopupMenuButton<ProductOrder>(
+                  //           icon: const Icon(Icons.sort, color: Color(0xFF1E3A8A)),
+                  //           onSelected: (order) {
+                  //             context.read<HomeBloc>().add(HomeProductOrderChanged(order));
+                  //           },
+                  //           itemBuilder: (context) => [
+                  //             const PopupMenuItem(
+                  //               value: ProductOrder.defaultOrder,
+                  //               child: Text('Default'),
+                  //             ),
+                  //             const PopupMenuItem(
+                  //               value: ProductOrder.priceLow,
+                  //               child: Text('Price: Low'),
+                  //             ),
+                  //             const PopupMenuItem(
+                  //               value: ProductOrder.priceHigh,
+                  //               child: Text('Price: High'),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // SizedBox(height: 8),
                   Expanded(
                       child:
                       isWideScreen ?
